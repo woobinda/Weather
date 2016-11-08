@@ -50,10 +50,15 @@ def summarise_forecast(data):
     for i in range(len(weather_list)):
         forecasts[weather_list[i]] = date_list[i]
 
+    temp_list = [temp['temp']['eve'] for temp in data['list']]
+    date_list = [utc_to_date(day['dt']) for day in data['list']]
+
     result = {
-        'city': city,           # city name
-        'max_temp': max_temp,   # maximum temp on period
-        'min_temp': min_temp,   # minimum temp on period
-        'forecasts': forecasts  # period dates grouped by weather
+        'city': city,            # city name
+        'max_temp': max_temp,    # maximum temp on period
+        'min_temp': min_temp,    # minimum temp on period
+        'date_list': date_list,  # array of dates
+        'temp_list': temp_list,  # array of temperature
+        'forecasts': forecasts   # period dates grouped by weather
     }
     return result
