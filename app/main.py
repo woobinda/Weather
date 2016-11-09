@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-
 from flask import Flask, json, render_template, redirect, url_for
 from flask import session
 from flask_bootstrap import Bootstrap
@@ -42,7 +41,7 @@ def index():
 
 @app.route('/chart', methods=['GET'])
 def get_chart(chartID='chart_ID', chart_type='column',
-              chart_height=550, chart_width=1200):
+              chart_height=520, chart_width=1200):
     """
     Build and display a graph with received data
 
@@ -70,11 +69,10 @@ def get_chart(chartID='chart_ID', chart_type='column',
     ]
     xAxis = {"categories": data['dates_list']}
     yAxis = {"title": {"text": 'Temperature'}}
-
     return render_template('chart.html', chartID=chartID, series=series,
                            chart=chart, xAxis=xAxis, yAxis=yAxis, lable=lable,
                            forecasts=forecasts, period=period, title=title)
 
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=7000)
+    app.run(host='localhost')
