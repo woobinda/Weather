@@ -2,7 +2,7 @@
 # settings for display charts
 chartID = 'chartID'
 chart_type = 'column'
-chart_height = 520
+chart_height = 500
 chart_width = 1150
 
 # weather API provider url

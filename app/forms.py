@@ -7,6 +7,7 @@ from wtforms.validators import Required, NumberRange
 class WeatherRequestForm(FlaskForm):
     """
     Client form for request to API, with following fields:
+    
           city        - city name
           period      - period in days
     """
