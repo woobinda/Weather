@@ -70,7 +70,6 @@ def get_chart_params(data, chartID='chart_ID',
     """
     Preparing parameters for graph:
 
-        forecasts      - period dates grouped by weather
         title          - chart title
         lable          - template title
         series         - groups of values that are displayed on the X axis
@@ -91,4 +90,5 @@ def get_chart_params(data, chartID='chart_ID',
     ]
     xAxis = {"categories": data['dates_list']}
     yAxis = {"title": {"text": 'Temperature'}}
-    return [forecasts, title, lable, chart, series, xAxis, yAxis]
+    result = [forecasts, title, lable, chart, series, xAxis, yAxis]
+    return result

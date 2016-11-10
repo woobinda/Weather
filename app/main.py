@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-
 from flask import Flask, json, render_template, redirect, url_for
 from flask import session
 from flask_bootstrap import Bootstrap
@@ -58,7 +57,6 @@ def get_chart(chartID='chartID'):
     period = str(len(data['dates_list'])) + ' days'
     forecasts, title, lable, chart, series, xAxis, yAxis = get_chart_params(
         data)
-
     return render_template('chart.html', chartID=chartID, series=series,
                            chart=chart, xAxis=xAxis, yAxis=yAxis, lable=lable,
                            forecasts=forecasts, period=period, title=title)
@@ -80,7 +78,6 @@ def get_date_chart(day_date, chartID='chartID'):
     period = day_date
     forecasts, title, lable, chart, series, xAxis, yAxis = get_chart_params(
         data)
-
     return render_template('chart.html', chartID=chartID, series=series,
                            chart=chart, xAxis=xAxis, yAxis=yAxis, lable=lable,
                            forecasts=forecasts, period=period, title=title)
