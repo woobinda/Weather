@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-#!flask/bin/python
-
 import os
 
 from flask import Flask, json, render_template, redirect, url_for, abort
