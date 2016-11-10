@@ -23,7 +23,8 @@ def index():
     if form.validate_on_submit():
         response = get_api_data(form.city.data, form.period.data)
         if response.status_code != 200:
-            abort(404)
+            return render_template('index.html', title='Weather',
+                                   form=form, message='Invalid City data')
         response_data = json.loads(response.text)
         data = summarise_forecast(response_data)
         session['data'] = data
@@ -39,7 +40,7 @@ def index():
             forecasts         - array of dates grouped by weather
         """
         return redirect(url_for('get_charts'))
-    return render_template('index.html', title='Weather', form=form)
+    return render_template('index.html', title='Weather forecasts', form=form)
 
 
 @app.route('/charts', methods=['GET'])
@@ -64,9 +65,9 @@ def get_charts():
     forecasts, title, lable, chart, chartID, series, \
         xAxis, yAxis = get_chart_params(data)
     session['common_forecasts'] = forecasts
-    return render_template('chart.html', chartID=chartID, series=series,
-                           chart=chart, xAxis=xAxis, yAxis=yAxis, lable=lable,
-                           forecasts=forecasts, period=period, title=title)
+    return render_template('chart.html', title=title, chart=chart, lable=lable,
+                           chartID=chartID, period=period, forecasts=forecasts,
+                           series=series, xAxis=xAxis, yAxis=yAxis)
 
 
 @app.route('/charts/<day_date>', methods=['GET'])
@@ -92,9 +93,9 @@ def charts_by_date(day_date):
     forecasts, title, lable, chart, chartID, series, \
         xAxis, yAxis = get_chart_params(data)
     forecasts = session['common_forecasts']
-    return render_template('chart.html', chartID=chartID, series=series,
-                           chart=chart, xAxis=xAxis, yAxis=yAxis, lable=lable,
-                           forecasts=forecasts, period=period, title=title)
+    return render_template('chart.html', title=title, chart=chart, lable=lable,
+                           chartID=chartID, period=period, forecasts=forecasts,
+                           series=series, xAxis=xAxis, yAxis=yAxis)
 
 
 @app.errorhandler(404)

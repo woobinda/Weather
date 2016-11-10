@@ -4,6 +4,7 @@
 {% block title %} {{title}} {% endblock %}
 {% block page_content %}
 <div class="col-md-6">
+	<a style='color:red'><i>{{message}}</i></a>
 	{{ wtf.quick_form(form) }}
 </div>
 {% endblock %}

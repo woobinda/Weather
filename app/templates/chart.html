@@ -5,17 +5,19 @@
 	<h2 style='color:#059bff; text-align: center;'>
 		<strong><i>{{lable}} on {{period}}:</strong></i></h2>
 	<hr style="height:2px;background-color:#222;">
-	<h3 style='text-align: left; color:orange;'>
-		<i><strong>Weather at current dates:</strong></i></h3>
-	<i>**Select date to see graph details</i>
+	<h2 style='text-align: left; color:orange;'>
+		<i><strong>Weather at current dates:</strong></i></h2>
+
+	<i>**Select date to see detailed graphs</i>
 	{% for weather, date in forecasts %}
 		<i><h4 style='padding-left: 30px;'>
 			<strong style='color: green'>{{weather}}</strong> &nbsp - &nbsp
 			{% for day_date in date %}
-				<a href="{{ url_for('charts_by_date', day_date = day_date ) }}">[{{day_date}}]&nbsp</a>
+				<a href="{{ url_for('charts_by_date', day_date = day_date ) }}">&nbsp{{day_date}}&nbsp;</a>
 			{% endfor %}
 		</h4></i>
 	{% endfor %}
+
 	<div style='text-align: center;'><h3>
 		<hr style="height:2px;background-color:#222;">
 		<i><a class="btn btn-info" style='color:#eeff00;' href="{{ url_for('get_charts') }}">Summarise charts</a></i>

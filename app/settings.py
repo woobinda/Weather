@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-
-# settings for graph displaying
+# settings for display charts
 chartID = 'chartID'
 chart_type = 'column'
 chart_height = 520
