@@ -22,11 +22,9 @@ def index():
     form = WeatherRequestForm()
     if form.validate_on_submit():
         response = get_api_data(form.city.data, form.period.data)
-        """
         if response.status_code != 200:
             return render_template('index.html', title='Weather',
                                    form=form, message='Invalid City data')
-        """
         response_data = json.loads(response.text)
         data = summarise_forecast(response_data)
         session['data'] = data
@@ -58,13 +56,11 @@ def get_charts():
         xAxis         - units of X-axis
         yAxis         - units of Y-axis
     """
-    """
     try:
         data = session['data']
     except KeyError:
         abort(404)
-    """
-    data = session['data']
+
     period = str(len(data['dates_list'])) + ' days'
     forecasts, title, lable, chart, chartID, series, \
         xAxis, yAxis = get_chart_params(data)
@@ -82,7 +78,6 @@ def charts_by_date(day_date):
         new_list        - array of values for requested day
         period          - day date in 'yyyy-mm-dd'
     """
-    """
     try:
         data = session['response_data']
     except KeyError:
@@ -91,8 +86,7 @@ def charts_by_date(day_date):
                 utc_to_date(day['dt']) == day_date]
     if not new_list:
         abort(404)
-    """
-    data = session['response_data']
+
     data['list'] = new_list
     data = summarise_forecast(data)
     period = day_date
@@ -110,4 +104,4 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0')
