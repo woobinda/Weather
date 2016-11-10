@@ -4,7 +4,7 @@ from wtforms import SubmitField, IntegerField, StringField
 from wtforms.validators import Required, NumberRange
 
 
-class RequestForm(FlaskForm):
+class WeatherRequestForm(FlaskForm):
     """
     Client form for request to API with next fields:
 
@@ -12,14 +12,13 @@ class RequestForm(FlaskForm):
             period	    - period in days
     """
     city = StringField('City',
-                       render_kw={'placeholder': 'Enter a city'},
+                       render_kw={'placeholder': 'Enter city name'},
                        validators=[Required()])
 
-    message = 'Available period is 1-14 days'
     period = IntegerField('Period (days)',
                           default=7,
                           render_kw={'placeholder': 'Enter period in days'},
                           validators=[Required(), NumberRange(min=1, max=14,
-                                                              message=message
+                                                              message='Available period is 1-14 days'
                                                               )])
     submit = SubmitField('Show weather')

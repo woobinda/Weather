@@ -3,23 +3,23 @@ import os
 from flask import Flask, json, render_template, redirect, url_for
 from flask import session
 from flask_bootstrap import Bootstrap
-from forms import RequestForm
+from forms import WeatherRequestForm
 from functions import utc_to_date, summarise_forecast, \
     get_api_data, get_chart_params
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
-
 bootstrap = Bootstrap(app)
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     """
-    Display form and redirect client to chart
+    Displays forms, takes client input data
+    and redirect client to chart template.
     """
-    form = RequestForm()
+    form = WeatherRequestForm()
     if form.validate_on_submit():
         response = get_api_data(form.city.data, form.period.data)
         response_data = json.loads(response.text)
@@ -29,21 +29,21 @@ def index():
         """
         Variable 'data' is a dictionary which contains following keys:
 
-            city             - city name
-            dates_list       - array of dates
-            morn_temps       - array of morning temperature
-            day_temps        - array of day temperature
-            night_temps      - array of night temperature
-            forecasts        - period dates grouped by weather
+            city              - city name
+            dates_list        - array of dates
+            morn_temps        - array of morning temperature
+            day_temps         - array of day temperature
+            night_temps       - array of night temperature
+            forecasts         - array of dates grouped by weather
         """
-        return redirect(url_for('get_chart'))
+        return redirect(url_for('get_charts'))
     return render_template('index.html', title='Weather', form=form)
 
 
-@app.route('/chart', methods=['GET'])
-def get_chart():
+@app.route('/charts', methods=['GET'])
+def get_charts():
     """
-    Build and display a chart with following data:
+    Build and display a charts with following data:
 
         chart         - display chart option settings
         period        - amount of days in requested period
@@ -62,10 +62,10 @@ def get_chart():
                            forecasts=forecasts, period=period, title=title)
 
 
-@app.route('/chart/<day_date>', methods=['GET'])
-def get_date_chart(day_date):
+@app.route('/charts/<day_date>', methods=['GET'])
+def get_date_charts(day_date):
     """
-    Providing chart for single day on selected date:
+    Providing charts for single day on selected date:
 
         new_list      - array of values for requested day
         period        - day date in 'yyyy-mm-dd'

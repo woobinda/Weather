@@ -7,7 +7,7 @@ from settings import api_URL, APPID, chart_type, chart_height, \
 
 def utc_to_date(utc):
     """
-    Translate utc date format to 'yyyy-mm-dd'
+    Translate utc date format to 'yyyy-mm-dd'.
     """
     date = datetime.fromtimestamp(int(utc)).strftime('%Y-%m-%d')
     return date
@@ -15,8 +15,9 @@ def utc_to_date(utc):
 
 def get_api_data(city, period, units='metric'):
     """
-    Create request to weather API and return response with JSON data
-
+    Create request to weather API and return response with JSON data:
+        city    - city name
+        period  - period in da
         units	- temperature units format('metric' = Kelvins)
     """
     city = 'q=' + city
@@ -32,7 +33,7 @@ def summarise_forecast(data):
     """
     Parsing a received data from API
     """
-    # sorting weather and date for each requested day
+    # sorting weather and dates for everyone day in requested period
     forecasts = []
     for day in data['list']:
         forecasts.append((day['dt'], day['weather'][0]['main']))
