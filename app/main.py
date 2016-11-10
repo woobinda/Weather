@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
+
 from flask import Flask, json, render_template, redirect, url_for
 from flask import session
 from flask_bootstrap import Bootstrap
 from forms import RequestForm
-from functions import get_api_data, summarise_forecast, \
-    create_chart, utc_to_date
+from functions import utc_to_date, summarise_forecast, \
+    get_api_data, get_chart_params
 
 
 app = Flask(__name__)
@@ -17,7 +18,7 @@ bootstrap = Bootstrap(app)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     """
-    Display form and redirect client to graph
+    Display form and redirect client to chart
     """
     form = RequestForm()
     if form.validate_on_submit():
@@ -29,33 +30,34 @@ def index():
         """
         Variable 'data' is a dictionary which contains next keys:
 
-            city              - city name
-            dates_list        - array of dates
-            morn_temps        - array of morning temperature
-            day_temps         - array of day temperature
-            night_temps       - array of night temperature
-            forecasts         - period dates grouped by weather
+            city             - city name
+            dates_list       - array of dates
+            morn_temps       - array of morning temperature
+            day_temps        - array of day temperature
+            night_temps      - array of night temperature
+            forecasts        - period dates grouped by weather
         """
-        return redirect(url_for('get_charts'))
+        return redirect(url_for('get_chart'))
     return render_template('index.html', title='Weather', form=form)
 
 
 @app.route('/chart', methods=['GET'])
-def get_charts(chartID='chartID'):
+def get_chart(chartID='chartID'):
     """
-    Build and display a graph with received data:
+    Build and display a chart with received data:
 
-        chart          - display chart option settings
-        period         - amount of days in requested period
-        title          - chart title
-        lable          - template title
-        series         - groups of values that are displayed on the X axis
-        xAxis          - units of X-axis
-        yAxis          - units of Y-axis
+        chart         - display chart option settings
+        period        - amount of days in requested period
+        title         - chart title
+        lable         - template title
+        series        - groups of values that are displayed on the X axis
+        xAxis         - units of X-axis
+        yAxis         - units of Y-axis
     """
     data = session['data']
     period = str(len(data['dates_list'])) + ' days'
-    forecasts, title, lable, chart, series, xAxis, yAxis = create_chart(data)
+    forecasts, title, lable, chart, series, xAxis, yAxis = get_chart_params(
+        data)
 
     return render_template('chart.html', chartID=chartID, series=series,
                            chart=chart, xAxis=xAxis, yAxis=yAxis, lable=lable,
@@ -65,10 +67,10 @@ def get_charts(chartID='chartID'):
 @app.route('/chart/<day_date>', methods=['GET'])
 def get_date_chart(day_date, chartID='chartID'):
     """
-    Providing graph for single selected day:
+    Providing graph for single day on selected date:
 
-        new_list         - array of values only for requested day
-        period           - date of requested day
+        new_list      - array of values only for requested day
+        period        - date of requested day
     """
     data = session['response_data']
     new_list = [day for day in data['list'] if
@@ -76,7 +78,8 @@ def get_date_chart(day_date, chartID='chartID'):
     data['list'] = new_list
     data = summarise_forecast(data)
     period = day_date
-    forecasts, title, lable, chart, series, xAxis, yAxis = create_chart(data)
+    forecasts, title, lable, chart, series, xAxis, yAxis = get_chart_params(
+        data)
 
     return render_template('chart.html', chartID=chartID, series=series,
                            chart=chart, xAxis=xAxis, yAxis=yAxis, lable=lable,

@@ -33,7 +33,7 @@ def get_api_data(city, period, units='metric'):
 
 def summarise_forecast(data):
     """
-    Parsing a received from API data
+    Parsing a received data from API
     """
     city = data['city']['name']
     forecasts = []
@@ -65,10 +65,10 @@ def summarise_forecast(data):
     return result
 
 
-def create_chart(data, chartID='chart_ID', chart_type='column',
-                 chart_height=520, chart_width=1200):
+def get_chart_params(data, chartID='chart_ID',
+                     chart_type='column', chart_height=520, chart_width=1200):
     """
-    Build and display a graph with received data:
+    Preparing parameters for graph:
 
         forecasts      - period dates grouped by weather
         title          - chart title
