@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 # settings for graph displaying
-chartID='chartID'
+chartID = 'chartID'
 chart_type = 'column'
 chart_height = 520
-chart_width = 1200
+chart_width = 1150
 
 # weather API provider url
 api_URL = 'http://api.openweathermap.org/data/2.5/forecast/daily?'

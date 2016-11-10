@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+
 from flask import Flask, json, render_template, redirect, url_for, abort
 from flask import session
 from flask_bootstrap import Bootstrap
@@ -62,7 +63,7 @@ def get_charts():
     period = str(len(data['dates_list'])) + ' days'
     forecasts, title, lable, chart, chartID, series, \
         xAxis, yAxis = get_chart_params(data)
-
+    session['common_forecasts'] = forecasts
     return render_template('chart.html', chartID=chartID, series=series,
                            chart=chart, xAxis=xAxis, yAxis=yAxis, lable=lable,
                            forecasts=forecasts, period=period, title=title)
@@ -90,10 +91,15 @@ def charts_by_date(day_date):
     period = day_date
     forecasts, title, lable, chart, chartID, series, \
         xAxis, yAxis = get_chart_params(data)
-
+    forecasts = session['common_forecasts']
     return render_template('chart.html', chartID=chartID, series=series,
                            chart=chart, xAxis=xAxis, yAxis=yAxis, lable=lable,
                            forecasts=forecasts, period=period, title=title)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 
 if __name__ == '__main__':

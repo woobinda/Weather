@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import requests
+
 from datetime import datetime
 from settings import api_URL, APPID, chart_type, chartID, \
     chart_height, chart_width
