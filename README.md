@@ -1,4 +1,4 @@
-# Weather (web API interaction).
+# Weather (web API interaction):
 Application interact with weather API (provider url - http://openweathermap.org) on Flask framework and Bootstrap.
 
 Servise parse a receiving data and build a charts with JavaScript 'Highcharts' library.

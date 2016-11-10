@@ -17,8 +17,8 @@ class WeatherRequestForm(FlaskForm):
     period = IntegerField('Period (days)',
                           default=7,
                           render_kw={'placeholder': 'Enter period in days'},
-                          validators=[Required(),
-                                      NumberRange(min=1, max=14,
-                                                  message='Available period is 1-14 days'
-                                                  )])
+                          validators=[Required(), NumberRange(
+                              min=1, max=14,
+                              message='Available period is 1-14 days'
+                          )])
     submit = SubmitField('Show weather')

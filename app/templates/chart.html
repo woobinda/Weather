@@ -2,39 +2,46 @@
 
 {% block title %}{{lable}}{% endblock %}
 {% block page_content %}
-	<h2 style='color:#059bff; text-align: center;'>
-		<strong><i>{{lable}} on {{period}}:</strong></i></h2>
-	<hr style="height:2px;background-color:#222;">
-	<h2 style='text-align: left; color:orange;'>
-		<i><strong>Weather at current dates:</strong></i></h2>
 
-	<i>**Select date to see detailed graphs</i>
+	<i><h2 style='color:#059bff; text-align: center;'>
+		<strong>{{lable}} on {{period}}:</strong>
+	</h2>
+		<hr style="height:2px;background-color:#222;">
+	<h2 style='text-align: center; color:#ff8c00;'>
+		<strong>Weather at current dates:</strong>
+	</h2></i>
+	<a style='color: red; font-size: 12px;'>
+	<i>**Select a date to see detailed graphs</i></a>
+
 	{% for weather, date in forecasts %}
-		<i><h4 style='padding-left: 30px;'>
-			<strong style='color: green'>{{weather}}</strong> &nbsp - &nbsp
+		<h4><i>
+		<strong style='color: #a342aa'>{{weather}}</strong> - &nbsp
 			{% for day_date in date %}
-				<a href="{{ url_for('charts_by_date', day_date = day_date ) }}">&nbsp{{day_date}}&nbsp;</a>
+				<a href="{{ url_for('charts_by_date', day_date = day_date) }}">
+					&nbsp;{{day_date}}&nbsp;</a>
 			{% endfor %}
-		</h4></i>
+		</i></h4>
 	{% endfor %}
 
-	<div style='text-align: center;'><h3>
+	<div style='text-align: center;'>
 		<hr style="height:2px;background-color:#222;">
-		<i><a class="btn btn-info" style='color:#eeff00;' href="{{ url_for('get_charts') }}">Summarise charts</a></i>
-	</h3></div>
+		<a class="btn btn-info" style='color:#eeff00;' 
+			href="{{ url_for('get_charts') }}">
+		<i><strong style='font-size: 18px'>Total chart</strong></i></a>
+	</div>
 {% endblock %}
 
 {% block scripts %}
 <div class="container" style='text-align: center;'>
 	<div id={{ chartID|safe }} class="chart"></div>
-	<script>
-		var chart_id = {{ chartID|safe }}
-		var series = {{ series|safe }}
-		var title = {{ title|safe }}
-		var xAxis = {{ xAxis|safe }}
-		var yAxis = {{ yAxis|safe }}
-		var chart = {{ chart|safe }}
-	</script>
+		<script>
+			var chart_id = {{ chartID|safe }}
+			var series = {{ series|safe }}
+			var title = {{ title|safe }}
+			var xAxis = {{ xAxis|safe }}
+			var yAxis = {{ yAxis|safe }}
+			var chart = {{ chart|safe }}
+		</script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 		<script src="http://code.highcharts.com/highcharts.js"></script>
 		<script src="../static/js/highcharts.js"></script>
