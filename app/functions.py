@@ -8,7 +8,6 @@ from settings import api_URL, APPID, chart_type, chart_height, \
 def utc_to_date(utc):
     """
     Translate utc date format to 'yyyy-mm-dd'
-
     """
     date = datetime.fromtimestamp(int(utc)).strftime('%Y-%m-%d')
     return date
@@ -19,7 +18,6 @@ def get_api_data(city, period, units='metric'):
     Create request to weather API and return response with JSON data
 
         units	- temperature units format('metric' = Kelvins)
-
     """
     city = 'q=' + city
     period = 'cnt=' + str(period)
@@ -33,10 +31,9 @@ def get_api_data(city, period, units='metric'):
 def summarise_forecast(data):
     """
     Parsing a received data from API
-
     """
-    forecasts = []
     # sorting weather and date for each requested day
+    forecasts = []
     for day in data['list']:
         forecasts.append((day['dt'], day['weather'][0]['main']))
     weather_list = list(set(map(lambda x: x[1], forecasts)))
@@ -47,6 +44,7 @@ def summarise_forecast(data):
     forecasts = []
     for i in range(len(dates_list)):
         forecasts.append([weather_list[i], dates_list[i]])
+
     # preparation additional data for build chart
     city = data['city']['name']
     dates_list = [utc_to_date(day['dt']) for day in data['list']]
@@ -75,7 +73,6 @@ def get_chart_params(data, chart_type=chart_type, chartID=chartID,
         series         - groups of values that are displayed on the X axis
         xAxis          - units of X-axis
         yAxis          - units of Y-axis
-
     """
     forecasts = data['forecasts']
     title = {"text": 'Temperature in %s' % str(data['city'])}
@@ -91,5 +88,4 @@ def get_chart_params(data, chart_type=chart_type, chartID=chartID,
     ]
     xAxis = {"categories": data['dates_list']}
     yAxis = {"title": {"text": 'Temperature'}}
-    result = [forecasts, title, lable, chartID, chart, series, xAxis, yAxis]
-    return result
+    return [forecasts, title, lable, chartID, chart, series, xAxis, yAxis]
