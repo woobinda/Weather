@@ -64,6 +64,7 @@ def get_charts():
     except KeyError:
         abort(404)
     """
+    data = session['data']
     period = str(len(data['dates_list'])) + ' days'
     forecasts, title, lable, chart, chartID, series, \
         xAxis, yAxis = get_chart_params(data)
@@ -91,7 +92,7 @@ def charts_by_date(day_date):
     if not new_list:
         abort(404)
     """
-
+    data = session['response_data']
     data['list'] = new_list
     data = summarise_forecast(data)
     period = day_date
