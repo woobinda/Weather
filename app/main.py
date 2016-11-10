@@ -43,7 +43,7 @@ def index():
 
 
 @app.route('/chart', methods=['GET'])
-def get_chart(chartID='chartID'):
+def get_chart():
     """
     Build and display a chart with received data:
 
@@ -58,15 +58,15 @@ def get_chart(chartID='chartID'):
     """
     data = session['data']
     period = str(len(data['dates_list'])) + ' days'
-    forecasts, title, lable, chart, series, xAxis, yAxis = get_chart_params(
-        data)
+    forecasts, title, lable, chartID, chart, series, \
+        xAxis, yAxis = get_chart_params(data)
     return render_template('chart.html', chartID=chartID, series=series,
                            chart=chart, xAxis=xAxis, yAxis=yAxis, lable=lable,
                            forecasts=forecasts, period=period, title=title)
 
 
 @app.route('/chart/<day_date>', methods=['GET'])
-def get_date_chart(day_date, chartID='chartID'):
+def get_date_chart(day_date):
     """
     Providing graph for single day on selected date:
 
@@ -80,8 +80,8 @@ def get_date_chart(day_date, chartID='chartID'):
     data['list'] = new_list
     data = summarise_forecast(data)
     period = day_date
-    forecasts, title, lable, chart, series, xAxis, yAxis = get_chart_params(
-        data)
+    forecasts, title, lable, chartID, chart, series, \
+        xAxis, yAxis = get_chart_params(data)
     return render_template('chart.html', chartID=chartID, series=series,
                            chart=chart, xAxis=xAxis, yAxis=yAxis, lable=lable,
                            forecasts=forecasts, period=period, title=title)

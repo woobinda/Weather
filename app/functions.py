@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import requests
 from datetime import datetime
-from settings import APPID, url
+from settings import api_URL, APPID, chart_type, chart_height, \
+    chart_width, chartID
 
 
 def utc_to_date(utc):
     """
     Translate utc date format to 'yyyy-mm-dd'
-    
+
     """
     date = datetime.fromtimestamp(int(utc)).strftime('%Y-%m-%d')
     return date
@@ -23,9 +24,9 @@ def get_api_data(city, period, units='metric'):
     city = 'q=' + city
     period = 'cnt=' + str(period)
     units = 'units=' + units
-    appid = 'APPID=' + APPID
-    request_data = city, units, period, appid
-    response = requests.request('POST', url + ('&').join(request_data))
+    app_id = 'APPID=' + APPID
+    request_data = city, units, period, app_id
+    response = requests.request('POST', api_URL + ('&').join(request_data))
     return response
 
 
@@ -34,24 +35,24 @@ def summarise_forecast(data):
     Parsing a received data from API
 
     """
-    city = data['city']['name']
     forecasts = []
-    # sorting weather and date for each day
+    # sorting weather and date for each requested day
     for day in data['list']:
         forecasts.append((day['dt'], day['weather'][0]['main']))
     weather_list = list(set(map(lambda x: x[1], forecasts)))
     dates_list = [[utc_to_date(x[0]) for x in forecasts if x[1] == weather]
                   for weather in weather_list]
+
     # grouping dates by weather
     forecasts = []
     for i in range(len(dates_list)):
         forecasts.append([weather_list[i], dates_list[i]])
-
     # preparation additional data for build chart
+    city = data['city']['name']
+    dates_list = [utc_to_date(day['dt']) for day in data['list']]
     morn_temps = [day['temp']['morn'] for day in data['list']]
     day_temps = [day['temp']['day'] for day in data['list']]
     night_temps = [day['temp']['night'] for day in data['list']]
-    dates_list = [utc_to_date(day['dt']) for day in data['list']]
 
     result = {
         'city': city,                   # city name
@@ -64,8 +65,8 @@ def summarise_forecast(data):
     return result
 
 
-def get_chart_params(data, chartID='chart_ID',
-                     chart_type='column', chart_height=520, chart_width=1200):
+def get_chart_params(data, chart_type=chart_type, chartID=chartID,
+                     chart_height=chart_height, chart_width=chart_width):
     """
     Preparing parameters for graph:
 
@@ -90,5 +91,5 @@ def get_chart_params(data, chartID='chart_ID',
     ]
     xAxis = {"categories": data['dates_list']}
     yAxis = {"title": {"text": 'Temperature'}}
-    result = [forecasts, title, lable, chart, series, xAxis, yAxis]
+    result = [forecasts, title, lable, chartID, chart, series, xAxis, yAxis]
     return result
