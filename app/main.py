@@ -18,6 +18,7 @@ bootstrap = Bootstrap(app)
 def index():
     """
     Display form and redirect client to chart
+
     """
     form = RequestForm()
     if form.validate_on_submit():
@@ -35,6 +36,7 @@ def index():
             day_temps        - array of day temperature
             night_temps      - array of night temperature
             forecasts        - period dates grouped by weather
+
         """
         return redirect(url_for('get_chart'))
     return render_template('index.html', title='Weather', form=form)
@@ -52,6 +54,7 @@ def get_chart(chartID='chartID'):
         series        - groups of values that are displayed on the X axis
         xAxis         - units of X-axis
         yAxis         - units of Y-axis
+
     """
     data = session['data']
     period = str(len(data['dates_list'])) + ' days'
@@ -67,8 +70,9 @@ def get_date_chart(day_date, chartID='chartID'):
     """
     Providing graph for single day on selected date:
 
-        new_list      - array of values only for requested day
-        period        - date of requested day
+        new_list      - array of values for requested day
+        period        - day date in 'yyyy-mm-dd'
+
     """
     data = session['response_data']
     new_list = [day for day in data['list'] if

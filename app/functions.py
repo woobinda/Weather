@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 import requests
 from datetime import datetime
-
-# unique account ID
-APPID = '1263e8d0166fbbac6b8c90ec718a2e8d'
-# weather API provider url
-url = 'http://api.openweathermap.org/data/2.5/forecast/daily?'
+from settings import APPID, url
 
 
 def utc_to_date(utc):
     """
     Translate utc date format to 'yyyy-mm-dd'
+    
     """
     date = datetime.fromtimestamp(int(utc)).strftime('%Y-%m-%d')
     return date
@@ -21,6 +18,7 @@ def get_api_data(city, period, units='metric'):
     Create request to weather API and return response with JSON data
 
         units	- temperature units format('metric' = Kelvins)
+
     """
     city = 'q=' + city
     period = 'cnt=' + str(period)
@@ -34,6 +32,7 @@ def get_api_data(city, period, units='metric'):
 def summarise_forecast(data):
     """
     Parsing a received data from API
+
     """
     city = data['city']['name']
     forecasts = []
@@ -75,6 +74,7 @@ def get_chart_params(data, chartID='chart_ID',
         series         - groups of values that are displayed on the X axis
         xAxis          - units of X-axis
         yAxis          - units of Y-axis
+
     """
     forecasts = data['forecasts']
     title = {"text": 'Temperature in %s' % str(data['city'])}

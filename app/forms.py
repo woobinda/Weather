@@ -10,16 +10,15 @@ class RequestForm(FlaskForm):
 
             city 	      - city name
             period	    - period in days
+            
     """
     city = StringField('City',
                        render_kw={'placeholder': 'Enter a city'},
                        validators=[Required()])
-
     period = IntegerField('Period (days)',
                           default=7,
                           render_kw={'placeholder': 'Enter period in days'},
-                          validators=[Required(),
-                                      NumberRange(min=1, max=14,
-                                                  message='Only 1-14 days periods'
-                                                  )])
+                          validators=[Required(), NumberRange(min=1, max=14,
+                                                              message='Available 1-14 days periods'
+                                                              )])
     submit = SubmitField('Show weather')
