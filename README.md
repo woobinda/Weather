@@ -4,3 +4,7 @@ Application interact with weather API (provider url - http://openweathermap.org)
 Servise parse a receiving data and build a charts with JavaScript 'Highcharts' library.
 
 The diagram displays a weather in city for requested days and builds a graphs of temperature for morning, day and night periods.
+
+To install all dependencies and run the application, you can use the console command to Makefile:
+
+$make start

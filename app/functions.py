@@ -2,7 +2,6 @@
 import requests
 from datetime import datetime
 
-
 # unique account ID
 APPID = '1263e8d0166fbbac6b8c90ec718a2e8d'
 # weather API provider url
@@ -21,7 +20,7 @@ def get_api_data(city, period, units='metric'):
     """
     Create request to weather API and return response with JSON data
 
-            units	- temperature units format('metric' = Kelvins)
+        units	- temperature units format('metric' = Kelvins)
     """
     city = 'q=' + city
     period = 'cnt=' + str(period)
@@ -44,7 +43,6 @@ def summarise_forecast(data):
     weather_list = list(set(map(lambda x: x[1], forecasts)))
     dates_list = [[utc_to_date(x[0]) for x in forecasts if x[1] == weather]
                   for weather in weather_list]
-
     # grouping dates by weather
     forecasts = []
     for i in range(len(dates_list)):
@@ -65,3 +63,32 @@ def summarise_forecast(data):
         'forecasts': forecasts          # period dates grouped by weather
     }
     return result
+
+
+def create_chart(data, chartID='chart_ID', chart_type='column',
+                 chart_height=520, chart_width=1200):
+    """
+    Build and display a graph with received data:
+
+        forecasts      - period dates grouped by weather
+        title          - chart title
+        lable          - template title
+        series         - groups of values that are displayed on the X axis
+        xAxis          - units of X-axis
+        yAxis          - units of Y-axis
+    """
+    forecasts = data['forecasts']
+    title = {"text": 'Temperature in %s' % str(data['city'])}
+    lable = 'Forecast in %s' % data['city']
+    chart = {
+        "renderTo": chartID, "type": chart_type,
+        "height": chart_height, "width": chart_width,
+    }
+    series = [
+        {"name": 'Morning', "data": data['morn_temps']},
+        {"name": 'Day',     "data": data['day_temps']},
+        {"name": 'Night',   "data": data['night_temps']}
+    ]
+    xAxis = {"categories": data['dates_list']}
+    yAxis = {"title": {"text": 'Temperature'}}
+    return [forecasts, title, lable, chart, series, xAxis, yAxis]

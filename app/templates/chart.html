@@ -1,18 +1,17 @@
 {% extends "base.html" %}
 
 {% block title %}{{lable}}{% endblock %}
-
 {% block page_content %}
-	<h1 style='color:#f48507; text-align: center;'>
-		<strong><i>{{lable}} on next {{period}} days:</strong></i>
-	</h1>
+	<h2 style='color:#059bff; text-align: center;'>
+		<strong><i>{{lable}} on {{period}}:</strong></i>
+	</h2>
 	<hr style="height:2px;background-color:#222;">
-	<h3 style='text-align: left; color:green;'>
+	<h3 style='text-align: left; color:#b2c13f#64700f;'>
 		<i><strong>Weather at current dates:</strong></i>
 	</h3>
 	{% for weather, date in forecasts %}
 		<i><h4 style='padding-left: 30px;'>
-			<strong style='color: blue'>{{weather}}</strong> &nbsp - &nbsp {{date}}
+			<strong style='color: green'>{{weather}}</strong> &nbsp - &nbsp {{date}}
 		</h4></i>
 	{% endfor %}
 {% endblock %}
