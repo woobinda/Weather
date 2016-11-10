@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-"""
-Settings for chart display template:
-"""
-chartID = 'chartID'
+
+# settings for graph displaying
+chartID='chartID'
 chart_type = 'column'
 chart_height = 520
 chart_width = 1200

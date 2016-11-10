@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from flask import Flask, json, render_template, redirect, url_for
+from flask import Flask, json, render_template, redirect, url_for, abort
 from flask import session
 from flask_bootstrap import Bootstrap
 from forms import WeatherRequestForm
@@ -16,18 +16,19 @@ bootstrap = Bootstrap(app)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     """
-    Displays forms, takes client input data
-    and redirect client to chart template.
+    Takes input data from client form and performs redirection to charts
     """
     form = WeatherRequestForm()
     if form.validate_on_submit():
         response = get_api_data(form.city.data, form.period.data)
+        if response.status_code != 200:
+            abort(404)
         response_data = json.loads(response.text)
         data = summarise_forecast(response_data)
         session['data'] = data
         session['response_data'] = response_data
         """
-        Variable 'data' is a dictionary which contains following keys:
+        Variable 'data' is a dictionary which contains a following keys:
 
             city              - city name
             dates_list        - array of dates
@@ -53,31 +54,43 @@ def get_charts():
         xAxis         - units of X-axis
         yAxis         - units of Y-axis
     """
-    data = session['data']
+    try:
+        data = session['data']
+    except KeyError:
+        abort(404)
+
     period = str(len(data['dates_list'])) + ' days'
-    forecasts, title, lable, chartID, chart, series, \
+    forecasts, title, lable, chart, chartID, series, \
         xAxis, yAxis = get_chart_params(data)
+
     return render_template('chart.html', chartID=chartID, series=series,
                            chart=chart, xAxis=xAxis, yAxis=yAxis, lable=lable,
                            forecasts=forecasts, period=period, title=title)
 
 
 @app.route('/charts/<day_date>', methods=['GET'])
-def get_date_charts(day_date):
+def charts_by_date(day_date):
     """
     Providing charts for single day on selected date:
 
-        new_list      - array of values for requested day
-        period        - day date in 'yyyy-mm-dd'
+        new_list        - array of values for requested day
+        period          - day date in 'yyyy-mm-dd'
     """
-    data = session['response_data']
+    try:
+        data = session['response_data']
+    except KeyError:
+        abort(404)
     new_list = [day for day in data['list'] if
                 utc_to_date(day['dt']) == day_date]
+    if not new_list:
+        abort(404)
+
     data['list'] = new_list
     data = summarise_forecast(data)
     period = day_date
-    forecasts, title, lable, chartID, chart, series, \
+    forecasts, title, lable, chart, chartID, series, \
         xAxis, yAxis = get_chart_params(data)
+
     return render_template('chart.html', chartID=chartID, series=series,
                            chart=chart, xAxis=xAxis, yAxis=yAxis, lable=lable,
                            forecasts=forecasts, period=period, title=title)

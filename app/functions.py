@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import requests
 from datetime import datetime
-from settings import api_URL, APPID, chart_type, chart_height, \
-    chart_width, chartID
+from settings import api_URL, APPID, chart_type, chartID, \
+    chart_height, chart_width
 
 
 def utc_to_date(utc):
     """
-    Translate utc date format to 'yyyy-mm-dd'.
+    Translate utc date format to 'yyyy-mm-dd'
     """
     date = datetime.fromtimestamp(int(utc)).strftime('%Y-%m-%d')
     return date
@@ -16,8 +16,9 @@ def utc_to_date(utc):
 def get_api_data(city, period, units='metric'):
     """
     Create request to weather API and return response with JSON data:
-        city    - city name
-        period  - period in da
+
+        city    - requested city name
+        period  - requested period, in days
         units	- temperature units format('metric' = Kelvins)
     """
     city = 'q=' + city
@@ -33,14 +34,13 @@ def summarise_forecast(data):
     """
     Parsing a received data from API
     """
-    # sorting weather and dates for everyone day in requested period
+    # sort weather and dates for each day in the period
     forecasts = []
     for day in data['list']:
         forecasts.append((day['dt'], day['weather'][0]['main']))
     weather_list = list(set(map(lambda x: x[1], forecasts)))
     dates_list = [[utc_to_date(x[0]) for x in forecasts if x[1] == weather]
                   for weather in weather_list]
-
     # grouping dates by weather
     forecasts = []
     for i in range(len(dates_list)):
@@ -52,7 +52,6 @@ def summarise_forecast(data):
     morn_temps = [day['temp']['morn'] for day in data['list']]
     day_temps = [day['temp']['day'] for day in data['list']]
     night_temps = [day['temp']['night'] for day in data['list']]
-
     result = {
         'city': city,                   # city name
         'dates_list': dates_list,       # array of dates
@@ -71,7 +70,7 @@ def get_chart_params(data, chart_type=chart_type, chartID=chartID,
 
         title          - chart title
         lable          - template title
-        series         - groups of values that are displayed on the X axis
+        series         - groups of parameters in X-axis
         xAxis          - units of X-axis
         yAxis          - units of Y-axis
     """
@@ -89,4 +88,4 @@ def get_chart_params(data, chart_type=chart_type, chartID=chartID,
     ]
     xAxis = {"categories": data['dates_list']}
     yAxis = {"title": {"text": 'Temperature'}}
-    return [forecasts, title, lable, chartID, chart, series, xAxis, yAxis]
+    return [forecasts, title, lable, chart, chartID, series, xAxis, yAxis]
