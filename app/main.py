@@ -22,10 +22,11 @@ def index():
     form = WeatherRequestForm()
     if form.validate_on_submit():
         response = get_api_data(form.city.data, form.period.data)
-        if response.status_code != 200:
-            return render_template('index.html', title='Weather',
-                                   form=form, message='Invalid City data')
         response_data = json.loads(response.text)
+        if response.status_code != 200:
+            message = response_data['message']
+            return render_template('index.html', title='Weather',
+                                   form=form, message=message)
         data = summarise_forecast(response_data)
         session['data'] = data
         session['response_data'] = response_data
