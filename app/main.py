@@ -76,19 +76,19 @@ def charts_by_date(day_date):
     """
     Providing charts for single day on selected date:
 
-        new_list        - array of values for requested day
+        forecasts_list        - array of values for requested day
         period          - day date in 'yyyy-mm-dd'
     """
     try:
         data = session['response_data']
     except KeyError:
         abort(404)
-    new_list = [day for day in data['list'] if
+    forecast_list = [day for day in data['list'] if
                 utc_to_date(day['dt']) == day_date]
-    if not new_list:
+    if not forecast_list:
         abort(404)
 
-    data['list'] = new_list
+    data['list'] = forecast_list
     data = summarise_forecast(data)
     period = day_date
     forecasts, title, lable, chart, chartID, series, \
