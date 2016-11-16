@@ -25,7 +25,7 @@ def index():
         response_data = json.loads(response.text)
         if response.status_code != 200:
             message = response_data['message']
-            return render_template('index.html', title='Weather',
+            return render_template('index.html', title='Weather Forecast',
                                    form=form, message=message)
         data = summarise_forecast(response_data)
         session['data'] = data
@@ -41,7 +41,7 @@ def index():
             forecasts         - array of dates grouped by weather
         """
         return redirect(url_for('get_charts'))
-    return render_template('index.html', title='Weather forecasts', form=form)
+    return render_template('index.html', title='Weather Forecasts', form=form)
 
 
 @app.route('/charts', methods=['GET'])
@@ -77,7 +77,7 @@ def charts_by_date(day_date):
     Providing charts for single day on selected date:
 
         forecasts_list        - array of values for requested day
-        period          - day date in 'yyyy-mm-dd'
+        period                - requested date in 'yyyy-mm-dd'
     """
     try:
         data = session['response_data']
