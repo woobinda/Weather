@@ -65,6 +65,10 @@ def get_charts():
     period = str(len(data['dates_list'])) + ' days'
     forecasts, title, lable, chart, chartID, series, \
         xAxis, yAxis = get_chart_params(data)
+    """
+    common_forecasts      - variable to display all the available dates
+                            for the period in the global template
+    """
     session['common_forecasts'] = forecasts
     return render_template('chart.html', title=title, chart=chart, lable=lable,
                            chartID=chartID, period=period, forecasts=forecasts,
@@ -84,7 +88,7 @@ def charts_by_date(day_date):
     except KeyError:
         abort(404)
     forecast_list = [day for day in data['list'] if
-                utc_to_date(day['dt']) == day_date]
+                     utc_to_date(day['dt']) == day_date]
     if not forecast_list:
         abort(404)
 
