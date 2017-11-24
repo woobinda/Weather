@@ -2,7 +2,7 @@
 import requests
 
 from datetime import datetime
-from settings import api_URL, APPID, chart_type, chartID, \
+from .settings import api_URL, APPID, chart_type, chartID, \
     chart_height, chart_width
 
 

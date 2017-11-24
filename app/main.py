@@ -4,10 +4,9 @@ import os
 from flask import Flask, json, render_template, redirect, url_for, abort
 from flask import session
 from flask_bootstrap import Bootstrap
-from forms import WeatherRequestForm
-from functions import utc_to_date, summarise_forecast, \
+from .forms import WeatherRequestForm
+from .functions import utc_to_date, summarise_forecast, \
     get_api_data, get_chart_params
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
